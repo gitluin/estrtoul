@@ -36,7 +36,7 @@ slen(const char* str){
  * 	change everything to strtok_r, or else you will lose your spot.
  */
 unsigned int
-estrtoul(char* str, int nchar){
+estrtoul(char* str, int nchar, int base){
 	char* check, * tmp, * local_str, * saveptr;
 	char** tmp_ops;
 	int i, j;
@@ -48,11 +48,13 @@ estrtoul(char* str, int nchar){
 
 	local_str = strndup(str, nchar*sizeof(char));
 
-	ret = strtoul(local_str, &check, 10);
+	if (base != 0){
+		ret = strtoul(local_str, &check, base);
 
-	/* if entire string was valid, all good */
-	if (*local_str != '\0' && *check == '\0')
-		return ret;
+		/* if entire string was valid, all good */
+		if (*local_str != '\0' && *check == '\0')
+			return ret;
+	}
 	
 	if ( (tmp = strtok_r(local_str, " ", &saveptr)) ){
 		to_store = (unsigned int) strtoul(tmp, &check, 10);
@@ -137,14 +139,20 @@ estrtoul(char* str, int nchar){
 
 int
 main(){
-	char msg[] = "firefox firefox-leedle '1 << 8 >> 1' 1 1 -1";
 	char* endptr, * saveptr;
+	char msg[] = "firefox firefox-leedle '1 << 8 >> 1' 1 1 -1";
+	char* test0 = "1 << 8 >> 1";
+	char* test2 = "010000000";
+	char* test10 = "128";
 	int nargs = 0;
 	char* tmp = strtok_r(msg, " ", &saveptr);
 
 	if (tmp)
 		nargs++;
 
+	printf("----\n");
+	printf("char msg[]\n");
+	printf("----\n");
 	printf("%d: %s\n", nargs++, tmp);
 
 	if ( (tmp = strtok_r(NULL, " ", &saveptr)) ){
@@ -154,8 +162,8 @@ main(){
 	if ( (tmp = strtok_r(NULL, "'", &saveptr)) ){
 		printf("%d: %s\n", nargs++, tmp);
 		printf("----\n");
-		printf("strtoul: %u\n", (unsigned int) strtoul(tmp, &endptr, 10));
-		printf("estrtoul: %u\n", estrtoul(tmp, slen(tmp)));
+		printf("strtoul10: %u\n", (unsigned int) strtoul(tmp, &endptr, 10));
+		printf("estrtoul: %u\n", estrtoul(tmp, slen(tmp), 0));
 		printf("literal: %u\n", 1 << 8 >> 1);
 		printf("endptr: %s\n", endptr);
 		printf("----\n");
@@ -173,7 +181,24 @@ main(){
 		printf("%d: %s\n", nargs++, tmp);
 	}
 
-	printf("%d\n", nargs);
+	printf("----\n");
+	printf("char* test0\n");
+	printf("----\n");
+	printf("strtoul base = 0 behavior is somewhat complex.\n");
+	printf("strtoul0: %u\n", (unsigned int) strtoul(test0, (char**) NULL, 0));
+	printf("estrtoul0: %u\n", estrtoul(test0, slen(test0), 0));
+
+	printf("----\n");
+	printf("char* test2\n");
+	printf("----\n");
+	printf("strtoul2: %u\n", (unsigned int) strtoul(test2, (char**) NULL, 2));
+	printf("estrtoul2: %u\n", estrtoul(test2, slen(test2), 2));
+
+	printf("----\n");
+	printf("char* test10\n");
+	printf("----\n");
+	printf("strtoul10: %u\n", (unsigned int) strtoul(test10, (char**) NULL, 10));
+	printf("estrtoul10: %u\n", estrtoul(test10, slen(test10), 10));
 
 	return 0;
 }
