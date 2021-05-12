@@ -139,8 +139,7 @@ int
 main(){
 	char msg[] = "firefox firefox-leedle '1 << 8 >> 1' 1 1 -1";
 	char* endptr, * saveptr;
-	int nargs = 0, i = 0;
-	char** tmp_args;
+	int nargs = 0;
 	char* tmp = strtok_r(msg, " ", &saveptr);
 
 	if (tmp)
@@ -155,7 +154,7 @@ main(){
 	if ( (tmp = strtok_r(NULL, "'", &saveptr)) ){
 		printf("%d: %s\n", nargs++, tmp);
 		printf("----\n");
-		printf("strtoul: %u\n", strtoul(tmp, &endptr, 10));
+		printf("strtoul: %u\n", (unsigned int) strtoul(tmp, &endptr, 10));
 		printf("estrtoul: %u\n", estrtoul(tmp, slen(tmp)));
 		printf("literal: %u\n", 1 << 8 >> 1);
 		printf("endptr: %s\n", endptr);
