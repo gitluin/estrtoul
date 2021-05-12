@@ -1,6 +1,6 @@
 # estrtoul
 
-`estrtoul` is a more flexible strtoul. If the input string is `strtoul`-parseable, that result will be returned. Otherwise, if the input is of the form `"1 << 8"`, etc., then that is evaluated by `estrtoul`.
+`estrtoul` is a more flexible `strtoul`. If the input string is `strtoul`-parseable, that result will be returned. Otherwise, if the input is of the form `"1 << 8"`, etc., then that is evaluated by `estrtoul`.
 
 `main` demonstrates the effectiveness of the function.
 
