@@ -4,7 +4,7 @@
 
 void
 die(const char* e, ...){
-	fprintf(stdout, "sara: %s\n", e);
+	fprintf(stdout, "estrtoul: %s\n", e);
 	exit(1);
 }
 
