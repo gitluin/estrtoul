@@ -9,3 +9,5 @@ Strings are evaluated left-to-right the same as `1 << 8 >> 1` would be by iterat
 Despite this, `estrtoul` will fail and `return 0` if the string does not start with a `strtoul`-parseable value. Excess operators and values are ignored, starting from the back (i.e. `"1 << 8 >> 1 1"` and `"1 << >> << 8 1"` both evaluate to `"1 << 8 >> 1"`).
 
 If you are using this while `strtok`-ing elsewhere, you will need to convert everything to `strtok_r`, or else your position in your string will be ruined.
+
+### Yes, it can handle string literals!
